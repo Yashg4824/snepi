@@ -37,10 +37,10 @@
     <script>
        var map = L.map('map')
 
-       // Add a base tile layer
+       /* Add a base tile layer
        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
          maxZoom: 19
-       }).addTo(map);
+       }).addTo(map);*/
 
        // Define the bounds
        var bounds = [
@@ -63,6 +63,13 @@
 
        // Fit the map to the bounds
        map.fitBounds(bounds);
+
+       // Add image overlay as the base layer
+       var imageUrl = 'pcolor_plots_2/2014-08.png'; // replace with your image URL
+       var imageOverlay = L.imageOverlay(imageUrl, bounds, {
+           opacity: 0.8,
+           interactive: false
+       }).addTo(map);
 
        // Function to handle each feature (for districts)
        function onEachFeature(feature, layer) {
