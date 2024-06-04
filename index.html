@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leaflet Map with India Boundaries</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+</head>
+<body>
+    <nav>
+        <img src="iitd.png" class="logo" alt="">
+    
+        <div class="navigation">
+        <ul>
+            <i id="menu-close" class="fas fa-times"></i>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="">About Us</a></li>
+            <li><a href="">Contact</a></li>
+            
+        </ul>
+    
+        <img src="img/menu.png" id="menu-btn" alt="">
+        </div>
+    </nav>
+    <div id="map-container">
+        <div id="map" style="height: 500px;"></div>
+    </div>                     
+    
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script src="indiaDistrict.js"></script>
+    <script src="indiaStates.js"></script>
+    <script src="indiaRivers.js"></script>
+    <script src="indiaBasin.js"></script>
+    <script>
+       var map = L.map('map')
+
+       // Add a base tile layer
+       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+         maxZoom: 19
+       }).addTo(map);
+
+       // Define the bounds
+       var bounds = [
+         [5.9484095274736717, 98.3478180095000880], // Southwest corner
+         [37.9663826133689355, 60.8240580598229599] // Northeast corner
+       ];
+
+       map.zoomDelta = 0.25;
+       map.zoomSnap = 0;
+
+       // Set max and min zoom levels
+       map.options.maxZoom = 50;
+       map.options.minZoom = 4.31;
+
+       // Set geographical boundaries for map panning
+       map.setMaxBounds([[8, 98], [38, 68]]);
+
+       // Disable zooming using the mouse wheel
+       map.scrollWheelZoom.disable();
+
+       // Fit the map to the bounds
+       map.fitBounds(bounds);
+
+       // Function to handle each feature (for districts)
+       function onEachFeature(feature, layer) {
+           // Example: Bind a popup
+           layer.bindPopup(feature.properties.name);
+       }
+
+       // Create layers
+       const statesLayer = L.geoJSON(indiastates, {
+           style: {
+               fillColor: 'none',
+               weight: 2,
+               color: 'black',
+               interactive: false
+           }
+       });
+
+       const districtsLayer = L.geoJSON(indiaDistrict, {
+           style: {
+               weight: 0.2,
+               fillColor: "black",
+               fillOpacity: 0.00001,
+               color: 'black'
+           },
+           onEachFeature: onEachFeature
+       });
+
+       const basinsLayer = L.geoJSON(indiaBasin, {
+           style: {
+               fillColor: 'none',
+               weight: 2,
+               color: 'red',
+               interactive: false
+           }
+       });
+
+       const riversLayer = L.geoJSON(indiaRivers, {
+           style: {
+               fillColor: 'none',
+               weight: 2,
+               color: 'blue',
+               interactive: false
+           }
+       });
+
+       // Add layers to the map with layer control
+       const overlayMaps = {
+           "States Boundary": statesLayer,
+           "District Boundary": districtsLayer,
+           "River Basin Boundary": basinsLayer,
+           "Rivers": riversLayer
+       };
+
+       L.control.layers(null, overlayMaps, { collapsed: false }).addTo(map);
+
+       // By default, add the layers you want to be visible initially
+       statesLayer.addTo(map);
+       districtsLayer.addTo(map);
+
+    </script>
+</body>
+</html>
