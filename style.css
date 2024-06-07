@@ -12,10 +12,11 @@ body
   font-family: 'Poppins', sans-serif;
 }
 #map-container {
-    width: 80%;
     margin: 0 auto;
     margin-top: 10%;
-    height: 500px
+    height: 512px;
+    width: 80%;
+    background-image: sample4.png;
 }
 
 nav {
@@ -101,4 +102,13 @@ nav .navigation ul li a:hover
 {
   color: #ff5150;
 
+}
+.my-image-overlay{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200px;
+    height: 800px;
+    
+    
 }
