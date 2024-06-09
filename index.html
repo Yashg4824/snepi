@@ -18,13 +18,11 @@
             <li><a href="index.html">Home</a></li>
             <li><a href="">About Us</a></li>
             <li><a href="">Contact</a></li>
-            
         </ul>
     
         <img src="img/menu.png" id="menu-btn" alt="">
         </div>
     </nav>
-    
 
     <div id="map-container">
         <div id="map" style="height: 500px;"></div>
@@ -39,13 +37,6 @@
       
       <input type="text" id="year" name="year" pattern="[0-9]{4}" title="Please enter a 4-digit year">
 
-      <!--<select id="year">
-        <option value="1951">1951</option>
-        <option value="1952">1952</option>
-       
-        <option value="2016">2016</option>
-      </select>-->
-      
       <select id="month">
         <option value="01">January</option>
         <option value="02">February</option>
@@ -61,9 +52,6 @@
         <option value="12">December</option>
       </select>
   
-  <!-- The variable to store the image path -->
-  <input type="hidden" id="image-path" value="">               
-    
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <script src="indiaDistrict.js"></script>
@@ -73,135 +61,129 @@
     <script>
         // Get the dropdown menus
         const timescaleSelect = document.getElementById('timescale');
-        const yearSelect = document.getElementById('year');
+        const yearInput = document.getElementById('year');
         const monthSelect = document.getElementById('month');
 
-        
-
-
-        var imagePath = '';
+        var imageOverlay; // Variable to store the current image overlay
 
         // Function to update the image path based on user selections
         function updateImagePath() {
-        const timescale = timescaleSelect.value;
-        const year = yearInput.value;
-        const month = monthSelect.value;
-        imagePath = `${timescale}/${year}-${month}.png`;
-        console.log(imagePath); // log the updated image path
-        // Create the image overlay
-        }
+            const timescale = timescaleSelect.value;
+            const year = yearInput.value;
+            const month = monthSelect.value;
+            const imagePath = `${timescale}/${year}-${month}.png`;
 
-        // Get the input field
-        const yearInput = document.getElementById('year');
+            console.log(imagePath); // Log the updated image path
+
+            // Update the image overlay on the map
+            if (imageOverlay) {
+                map.removeLayer(imageOverlay);
+            }
+
+            // Define the image bounds
+            var imageBounds = [
+                [1.753893, 60.835392], // Southwest corner (near Kanyakumari, Tamil Nadu)
+                [40.106056, 104.395833] // Adjust the bounds to match your image
+            ];
+
+            imageOverlay = L.imageOverlay(imagePath, imageBounds);
+            imageOverlay.setOpacity(0.6); // Adjust the opacity value
+            imageOverlay.addTo(map);
+        }
 
         // Add event listeners to the dropdown menus and input field
         timescaleSelect.addEventListener('change', updateImagePath);
         yearInput.addEventListener('input', updateImagePath);
         monthSelect.addEventListener('change', updateImagePath);
 
-        // Initial update of the image path
-        updateImagePath();
-        
-       var map = L.map('map')
+        // Initial map setup
+        var map = L.map('map');
 
-       //Add a base tile layer
-       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-         maxZoom: 19
-       }).addTo(map);
+        // Add a base tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19
+        }).addTo(map);
 
-       // Define the bounds
-       var bounds = [
+        // Define the bounds
+        var bounds = [
             [8.753893, 68.162445], // Southwest corner (near Kanyakumari, Tamil Nadu)
             [39.513611, 97.395833] // Northeast corner (near Ledo, Arunachal Pradesh)
-       ];
+        ];
 
-       map.zoomDelta = 0.25;
-       map.zoomSnap = 0;
+        map.zoomDelta = 0.25;
+        map.zoomSnap = 0;
 
-       // Set max and min zoom levels
-       map.options.maxZoom = 50;
-       map.options.minZoom = 4.31;
+        // Set max and min zoom levels
+        map.options.maxZoom = 50;
+        map.options.minZoom = 4.31;
 
-       // Set geographical boundaries for map panning
-       map.setMaxBounds([[10, 98], [38, 68]]);
+        // Set geographical boundaries for map panning
+        map.setMaxBounds([[10, 98], [38, 68]]);
 
-       // Disable zooming using the mouse wheel
-       map.scrollWheelZoom.disable();
+        // Disable zooming using the mouse wheel
+        map.scrollWheelZoom.disable();
 
-       // Fit the map to the bounds
-       map.fitBounds(bounds);
+        // Fit the map to the bounds
+        map.fitBounds(bounds);
 
-       
-       // Function to handle each feature (for districts)
-       function onEachFeature(feature, layer) {
-           // Example: Bind a popup
-           layer.bindPopup(feature.properties.name);
-       }
+        // Function to handle each feature (for districts)
+        function onEachFeature(feature, layer) {
+            // Example: Bind a popup
+            layer.bindPopup(feature.properties.name);
+        }
 
-       // Define the image URL and bounds
-        //var imageUrl = 'snepi_3/2016-02.png';
-        var imageBounds = [[1.753893, 60.835392], // Southwest corner (near Kanyakumari, Tamil Nadu)
-            [40.106056, 104.395833]]; // adjust the bounds to match your image
-       var imageUrl = 'snepi_12/2016-12.png';
-        
-      // Create the image overlay
-        var imageOverlay = L.imageOverlay(imageUrl, imageBounds);
+        // Create layers
+        const statesLayer = L.geoJSON(indiastates, {
+            style: {
+                fillColor: 'none',
+                weight: 2,
+                color: 'black',
+                interactive: false
+            }
+        });
 
-        imageOverlay.setOpacity(0.6); // adjust the opacity value
-        // Add the image overlay to the map
-        imageOverlay.addTo(map);
+        const districtsLayer = L.geoJSON(indiaDistrict, {
+            style: {
+                weight: 0.2,
+                fillColor: "black",
+                fillOpacity: 0.00001,
+                color: 'black'
+            },
+            onEachFeature: onEachFeature
+        });
 
-       // Create layers
-       const statesLayer = L.geoJSON(indiastates, {
-           style: {
-               fillColor: 'none',
-               weight: 2,
-               color: 'black',
-               interactive: false
-           }
-       });
+        const basinsLayer = L.geoJSON(indiaBasin, {
+            style: {
+                fillColor: 'none',
+                weight: 2,
+                color: 'red',
+                interactive: false
+            }
+        });
 
-       const districtsLayer = L.geoJSON(indiaDistrict, {
-           style: {
-               weight: 0.2,
-               fillColor: "black",
-               fillOpacity: 0.00001,
-               color: 'black'
-           },
-           onEachFeature: onEachFeature
-       });
+        const riversLayer = L.geoJSON(indiaRivers, {
+            style: {
+                fillColor: 'none',
+                weight: 2,
+                color: 'blue',
+                interactive: false
+            }
+        });
 
-       const basinsLayer = L.geoJSON(indiaBasin, {
-           style: {
-               fillColor: 'none',
-               weight: 2,
-               color: 'red',
-               interactive: false
-           }
-       });
+        // Add layers to the map with layer control
+        const overlayMaps = {
+            "States Boundary": statesLayer,
+            "District Boundary": districtsLayer,
+            "River Basin Boundary": basinsLayer,
+            "Rivers": riversLayer
+        };
 
-       const riversLayer = L.geoJSON(indiaRivers, {
-           style: {
-               fillColor: 'none',
-               weight: 2,
-               color: 'blue',
-               interactive: false
-           }
-       });
+        L.control.layers(null, overlayMaps, { collapsed: false }).addTo(map);
 
-       // Add layers to the map with layer control
-       const overlayMaps = {
-           "States Boundary": statesLayer,
-           "District Boundary": districtsLayer,
-           "River Basin Boundary": basinsLayer,
-           "Rivers": riversLayer
-       };
+        // By default, add the layers you want to be visible initially
+        statesLayer.addTo(map);
+        districtsLayer.addTo(map);
 
-       L.control.layers(null, overlayMaps, { collapsed: false }).addTo(map);
-
-       // By default, add the layers you want to be visible initially
-       statesLayer.addTo(map);
-       districtsLayer.addTo(map);
         // Add a mouseover event listener to the map
         map.on('mousemove', function(e) {
             // Get the coordinates of the mouse position
@@ -209,9 +191,9 @@
 
             // Create a popup with the coordinates
             var popup = L.popup()
-            .setLatLng(coord)
-            .setContent("Coordinates: " + coord.toString())
-            .openOn(map);
+                .setLatLng(coord)
+                .setContent("Coordinates: " + coord.toString())
+                .openOn(map);
         });
 
         // Add a mouseout event listener to the map to close the popup when the mouse leaves the map
@@ -219,7 +201,8 @@
             map.closePopup();
         });
 
+        // Initial update of the image path
+        updateImagePath();
     </script>
-   
 </body>
 </html>
