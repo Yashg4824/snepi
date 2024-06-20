@@ -27,17 +27,24 @@
     <div id="map-container">
         <div id="map" style="height: 500px;"></div>
     </div>     
-     <!-- Create the 3 dropdown menus -->
-     <select id="timescale">
+    <div id="image-container">
+        <img src="colorbar.png" alt="" style="width: 50%;  display: block;
+        margin-left: auto;
+        margin-right: auto;"/>
+    </div>
+
+    <!-- Create the 3 dropdown menus -->
+    <select id="timescale">
         <option value="snepi_1">Timescale 1</option>
         <option value="snepi_3">Timescale 2</option>
         <option value="snepi_6">Timescale 3</option>
         <option value="snepi_12">Timescale 4</option>
-      </select>
-      
-      <input type="text" id="year" name="year" pattern="[0-9]{4}" title="Please enter a 4-digit year">
+    </select>
+     
+    <input type="text" id="year" name="year" pattern="[0-9]{4}" title="Please enter a 4-digit year">
+    
 
-      <select id="month">
+    <select id="month">
         <option value="01">January</option>
         <option value="02">February</option>
         <option value="03">March</option>
@@ -50,8 +57,11 @@
         <option value="10">October</option>
         <option value="11">November</option>
         <option value="12">December</option>
-      </select>
-  
+    </select>
+    <div class="input-container ic1">
+
+   
+
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <script src="indiaDistrict.js"></script>
@@ -200,6 +210,25 @@
         map.on('mouseout', function() {
             map.closePopup();
         });
+
+        // Add the legend to the map
+        var legend = L.control({ position: 'bottomright' });
+
+        legend.onAdd = function(map) {
+            var div = L.DomUtil.create('div', 'legend');
+            var categories = ['Exceptional', 'Extreme', 'Severe', 'Moderate', 'Abnormal', 'Normal'];
+            var colors = ['brown', 'red', 'orange', 'rgb(252, 214, 148)', 'yellow', 'white'];
+
+            div.innerHTML += '<strong>Drought Categories</strong><br>';
+            
+            for (var i = 0; i < categories.length; i++) {
+                div.innerHTML += '<i style="background:' + colors[i] + '"></i> ' + categories[i] + '<br>';
+            }
+
+            return div;
+        };
+
+        legend.addTo(map);
 
         // Initial update of the image path
         updateImagePath();
