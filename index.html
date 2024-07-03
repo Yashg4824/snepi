@@ -31,16 +31,16 @@
         <img src="Drought scale.png" alt="" style="width: 50%;  display: block;
         margin-left: auto;
         margin-right: auto;
-        opacity: 0.8;"/>
+        opacity: 0.9;"/>
     </div>
 
     <div class="form-group">
         <label for="timescale">Select Timescale:</label>
         <select id="timescale">
-            <option value="snepi_1">Timescale 1</option>
-            <option value="snepi_3">Timescale 2</option>
-            <option value="snepi_6">Timescale 3</option>
-            <option value="snepi_12">Timescale 4</option>
+            <option value="snepi_1">1 Month</option>
+            <option value="snepi_3"> 3 Month</option>
+            <option value="snepi_6">6 Month</option>
+            <option value="snepi_12">12 Month</option>
         </select>
     </div>
     
@@ -147,14 +147,14 @@
         // Function to handle each feature (for districts)
         function onEachFeature(feature, layer) {
             // Example: Bind a popup
-            layer.bindPopup(feature.properties.name);
+            layer.bindPopup(feature.properties.District);
         }
 
         // Create layers
         const statesLayer = L.geoJSON(indiastates, {
             style: {
                 fillColor: 'none',
-                weight: 2,
+                weight: 1.5,
                 color: 'black',
                 interactive: false
             }
@@ -162,7 +162,7 @@
 
         const districtsLayer = L.geoJSON(indiaDistrict, {
             style: {
-                weight: 0.2,
+                weight: 0.5,
                 fillColor: "black",
                 fillOpacity: 0.001,
                 color: 'black'
@@ -173,7 +173,7 @@
         const basinsLayer = L.geoJSON(indiaBasin, {
             style: {
                 fillColor: 'none',
-                weight: 2,
+                weight: 1,
                 color: 'red',
                 interactive: false
             }
@@ -182,7 +182,7 @@
         const riversLayer = L.geoJSON(indiaRivers, {
             style: {
                 fillColor: 'none',
-                weight: 2,
+                weight: 1,
                 color: 'blue',
                 interactive: false
             }
@@ -202,41 +202,25 @@
         statesLayer.addTo(map);
         districtsLayer.addTo(map);
 
-        // Add a mouseover event listener to the map
-        map.on('mousemove', function(e) {
-            // Get the coordinates of the mouse position
-            var coord = e.latlng;
+        map.on('click', function(e) {
+    // Get the coordinates of the click position
+    var coord = e.latlng;
+    var lat = coord.lat.toFixed(5);
+    var lng = coord.lng.toFixed(5);
 
-            // Create a popup with the coordinates
-            var popup = L.popup()
-                .setLatLng(coord)
-                .setContent("Coordinates: " + coord.toString())
-                .openOn(map);
-        });
+    // Create a popup with the coordinates
+    var popup = L.popup()
+        .setLatLng(coord)
+        .setContent("Coordinates: " + lat + ", " + lng)
+        .openOn(map);
+});
 
         // Add a mouseout event listener to the map to close the popup when the mouse leaves the map
         map.on('mouseout', function() {
             map.closePopup();
         });
 
-        // Add the legend to the map
-       /* var legend = L.control({ position: 'bottomright' });
-
-        legend.onAdd = function(map) {
-            var div = L.DomUtil.create('div', 'legend');
-            var categories = ['Exceptional', 'Extreme', 'Severe', 'Moderate', 'Abnormal', 'Normal'];
-            var colors = ['brown', 'red', 'orange', 'rgb(252, 214, 148)', 'yellow', 'white'];
-
-            div.innerHTML += '<strong>Drought Categories</strong><br>';
-            
-            for (var i = 0; i < categories.length; i++) {
-                div.innerHTML += '<i style="background:' + colors[i] + '"></i> ' + categories[i] + '<br>';
-            }
-
-            return div;
-        };
-
-        legend.addTo(map); */
+        
 
         // Initial update of the image path
         updateImagePath();
