@@ -10,9 +10,10 @@
 </head>
 <body>
     <nav>
-        <img src="iitd.png" class="logo" alt="">
+        <img src="images/iit d.png" class="logo" alt="">
     
         <div class="navigation">
+            <H1>DROUGHT MONITOR: SNEPI INDEX</H1>
         <ul>
             <i id="menu-close" class="fas fa-times"></i>
             <li><a href="index.html">Home</a></li>
@@ -20,15 +21,17 @@
             <li><a href="https://www.researchgate.net/profile/Dhanya-C-T">Contact</a></li>
         </ul>
     
-        <img src="img/menu.png" id="menu-btn" alt="">
+        <img src="images/more.png" id="menu-btn" alt="">
         </div>
+        
     </nav>
+   
 
     <div id="map-container">
         <div id="map" style="height: 500px;"></div>
     </div>     
     <div id="image-container">
-        <img src="Drought scale.png" alt="" style="width: 50%;  display: block;
+        <img src="images/Drought scale.png" alt="" style="width: 50%;  display: block;
         margin-left: auto;
         margin-right: auto;
         opacity: 0.9;"/>
@@ -66,16 +69,48 @@
             <option value="12">December</option>
         </select>
     </div>
+    <footer>
+		
+        
+
+
+		<div class="footer-col">
+            <h2>Dhanya C. T., Ph.D. (She/Her)</h2>
+            <h3>Rama Kanta Chair Professor,</h3>   
+              <h3>Professor, Department of Civil Engineering,</h3> 
+              <h3> Indian Institute of Technology (IIT) Delhi</h3>
+              <h3>New Delhi, India.</h3>
+         
+
+            <p>Phone: +91 11 2659 7328</p>
+            <p>Email: dhanya@civil.iitd.ac.in; dhanyact@gmail.com</p>
+            
+		
+            <div class="footer-col">
+		
+            <li><a href="http://web.iitd.ac.in/~dhanya/">Home Page</a></li>
+            <li><a href="https://jalsuraksha.iitd.ac.in/">Water Security</a></li> 
+			
+		</div>
+		</div>
+
+		<div class="copyright">
+			<p>
+				Copyright @ 2024 All rights reserved
+			</p>
+			
+		</div>
+	</footer>
     
 
    
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-    <script src="indiaDistrict.js"></script>
-    <script src="indiaStates.js"></script>
-    <script src="indiaRivers.js"></script>
-    <script src="indiaBasin.js"></script>
+    <script src="GeoJson layers/indiaDistrict.js"></script>
+    <script src="GeoJson layers/indiaStates.js"></script>
+    <script src="GeoJson layers/indiaRivers.js"></script>
+    <script src="GeoJson layers/indiaBasin.js"></script>
     <script>
         // Get the dropdown menus
         const timescaleSelect = document.getElementById('timescale');

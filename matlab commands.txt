@@ -1,0 +1,35 @@
+These are the commands use for image extraction
+
+>> set(0,'DefaultFigureColormap',feval('hot')); for setting the colormap as HOT 
+
+Commands to save all image at png format:
+>> % Define the output folder
+output_folder = 'SNEPI_12';
+
+% Create the output folder if it doesn't exist
+if ~exist(output_folder, 'dir')
+    mkdir(output_folder);
+end
+
+% Loop over the years and months
+for year = 1951:2016
+    for month = 1:12
+        % Extract the data for the current month and year
+        A = squeeze(C(:,:, (year-1951)*12 + month));
+        
+        % Create the pcolor plot
+        figure;
+        pcolor(A);
+        shading flat;
+        axis off;
+
+        
+        % Save the plot as a PNG image file
+        filename = sprintf('%s/%d-%02d.png', output_folder, year, month);
+        saveas(gcf, filename);
+        
+        % Close the figure to avoid clutter
+        close(gcf);
+    end
+end
+
