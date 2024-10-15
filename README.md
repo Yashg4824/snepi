@@ -38,9 +38,8 @@ Deployed Link: https://iitdsnepi.netlify.app/
 
 ## Screenshots
 
-![App Screenshot](https://drive.google.com/file/d/1DD1PCkIuTyRS3UgVmV0ZamZhPzzdDUtY/view?usp=sharing)
+(https://drive.google.com/file/d/1DD1PCkIuTyRS3UgVmV0ZamZhPzzdDUtY/view?usp=sharing)
 
-![App Screenshot](https://drive.google.com/file/d/1snnHYk4FUytTkY3L4-_ft_AE7xJRsJEO/view?usp=sharing)
 
 ## Certificate 
 
